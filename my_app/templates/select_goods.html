@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>库存查询</title>
+
+    <script src="/static/bootstrap-3.4.1-dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css"/>
+    <style>
+        .good_info{
+            font-size: 15px;
+        }
+        input[type="text"]{
+            height:35px;
+            width: 300px;
+        }
+    </style>
+
+    <script>
+{#<!--    修改商品信息-->#}
+        function change_goods_info() {
+            id=document.getElementById('which_goods').value;
+            pici = document.getElementById("pici_change").value;
+            huohao = document.getElementById("huohao_change").value;
+            goods_name = document.getElementById("goods_name_change").value;
+            price = document.getElementById("price_change").value;
+            tiaoma = document.getElementById("tiaoma_change").value;
+            chima = document.getElementById("chima_change").value;
+            shuliang = document.getElementById("shuliang_change").value;
+            pinlei = document.getElementById("pinlei_change").value;
+            cangku = document.getElementById("cangku_change").value;
+            beizhu = document.getElementById("beizhu_change").value;
+            console.log(pici)
+            $.get("/change_goods_info/", {
+                "id":id,
+                "pici": pici,
+                "huohao": huohao,
+                "goods_name": goods_name,
+                "price": price,
+                "tiaoma": tiaoma,
+                "chima": chima,
+                "shuliang": shuliang,
+                "pinlei": pinlei,
+                "cangku": cangku,
+                "beizhu": beizhu,
+            },function (ret){
+                if(ret=="success"){
+                    alert("修改成功")
+                    document.location.href="/select_goods/"
+                }else {
+                    alert(ret)
+                }
+            })
+        }
+
+        {#点击修改商品按钮后弹窗商品弹窗#}
+        function open_goods_info(goods_id) {
+            document.getElementById('change_goods').style.display="block";
+            $.get('/get_goods_info/',{
+                "goods_id":goods_id,
+            },function (ret){
+                document.getElementById("pici_change").value=ret.batchname;
+                document.getElementById("which_goods").value=ret.id;
+                document.getElementById("huohao_change").value=ret.goodsserial;
+                document.getElementById("goods_name_change").value=ret.goodsname;
+                document.getElementById("price_change").value=ret.totalprice;
+                document.getElementById("tiaoma_change").value=ret.barcode;
+                document.getElementById("chima_change").value=ret.inputsize;
+                document.getElementById("shuliang_change").value=ret.quantity;
+                document.getElementById("pinlei_change").value=ret.goodstype;
+                document.getElementById("cangku_change").value=ret.cangku;
+                document.getElementById("beizhu_change").value=ret.beizhu;
+            })
+        }
+
+        {##根据筛选条件查询商品信息#}
+        function goods_select() {
+            goods_name=document.getElementById('goods_name').value;
+            goods_huohao=document.getElementById('goods_huohao').value;
+            goods_tiaoma=document.getElementById('goods_tiaoma').value;
+            goods_type=document.getElementById('goods_type').value;
+            cagnku=document.getElementById('cagnku').value;
+            $.get("/goods_select/",{
+                "goods_name":goods_name,
+                "goods_huohao":goods_huohao,
+                "goods_tiaoma":goods_tiaoma,
+                "goods_type":goods_type,
+                "cagnku":cagnku,
+            },function (ret){
+
+
+            })
+
+        }
+    </script>
+
+</head>
+<body >
+
+    <div style="color: black;padding: 50px;padding-left: 225px">
+        <div>
+            <span id="goods_huohao" style="font-size: larger">商品货号：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span id="goods_name" style="font-size: larger">商品名称：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            <br><br>
+            <span id="goods_tiaoma" style="font-size: larger">商品条码：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span id="goods_type" style="font-size: larger">商品类型：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span id="cagnku" style="font-size: larger">仓库：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button onclick="goods_select()" style="width: 100px;height: 40px;font-size: x-large;">查 询</button>
+        </div><br>
+        <hr style="background-color: #aaaaaa; height: 1px; border: 0"/>
+        <table border="1" style=";color: black" class="table table-striped">
+            <thead style="font-size: x-large;">
+                <tr>
+                    <th>商品ID</th>
+                    <th>商品货号</th>
+                    <th>商品名称</th>
+                    <th>商品类型</th>
+                    <th>条码</th>
+                    <th>尺码</th>
+                    <th>售价</th>
+                    <th>剩余库存</th>
+                    <th>所属仓库</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody style="color: black">
+                {% for goods_info in goods %}
+                <tr>
+                     <td>{{ goods_info.id }}</td>
+                     <td>{{ goods_info.goodsserial }}</td>
+                     <td>{{ goods_info.goodsname }}</td>
+                     <td>{{ goods_info.goodstype }}</td>
+                     <td>{{ goods_info.barcode }}</td>
+                     <td>{{ goods_info.inputsize }}</td>
+                     <td>{{ goods_info.totalprice }}</td>
+                     <td>{{ goods_info.quantity }}</td>
+                     <td>{{ goods_info.cangku }}</td>
+                     <td>
+                         <button onclick="open_goods_info('{{ goods_info.id }}')" class="btn btn-success" href="">修改商品</button>
+                         <button onclick="javascript:document.location.href='/del_goods/{{ goods_info.id }}/'" class="btn btn-danger" href="">删除</button>
+                     </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {#    修改商品弹窗#}
+    <div id="change_goods" style="color: black;box-shadow: 4px 4px 8px grey;padding-left: 10%;padding-top: 2%;
+               border: 1px solid black;z-index: 9999;overflow: auto;display: none;
+                border-radius: 5px;position:fixed;top: 15%;left: 20%;background: antiquewhite;width: 60%;height: 73%">
+        <input id="which_goods" type="text" style="display: none">
+        <span class="goods_info"> 批次： <input class="goods_input" type="text" id="pici_change" ></span><br><br>
+        <span class="goods_info" > 货号： <input class="goods_input" type="text" id="huohao_change" ></span><br><br>
+        <span class="goods_info" > 商品名称： <input class="goods_input" type="text" id="goods_name_change" ></span><br><br>
+        <span class="goods_info" > 售价： <input class="goods_input" type="text" id="price_change" ></span><br><br>
+        <span class="goods_info" > 条码： <input class="goods_input" type="text" id="tiaoma_change" ></span><br><br>
+        <span class="goods_info" > 尺码： <input class="goods_input" type="text" id="chima_change" ></span><br><br>
+        <span class="goods_info" > 数量： <input class="goods_input"  type="text" id="shuliang_change" ></span><br><br>
+        <span class="goods_info" > 品类： <input class="goods_input" type="text" id="pinlei_change" ></span><br><br>
+        <span class="goods_info" > 入库仓库： <input class="goods_input" type="text" id="cangku_change" ></span><br><br>
+        <span style="font-size: 15px"> 备注  ：</span>&nbsp<textarea id="beizhu_change" cols="45" rows="3"></textarea><br><br>
+        <button onclick="change_goods_info()" class="btn btn-success">确定</button>
+        <button class="btn btn-danger" onclick="javascript:document.getElementById('change_goods').style.display='none'">取消</button><br><br>
+    </div>
+
+</body>
+</html>

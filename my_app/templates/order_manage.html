@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单管理</title>
+
+    <style>
+        div[class="sell_info"]{
+            color: black;
+            box-shadow: 4px 4px 8px grey;
+
+            padding-left: 5%;
+            padding-top: 2%;
+            border: 1px solid black;
+            z-index: 9999;
+            overflow: auto;
+            display: none;
+            border-radius: 5px;
+            position:fixed;
+            top: 30%;
+            left: 40%;
+            background: ghostwhite;
+            width: 25%;
+            height: 32%;
+        }
+
+        div[class="sell_info1"]{
+            text-align: center;
+        }
+
+
+    </style>
+    
+    <script>
+
+        {#总收入#}
+        function total_sell() {
+            document.getElementById('total_sell').style.display="block";
+            $.get("/total_sell/",function (ret){
+                document.getElementById('customer_phone').value=ret.sell_price__sum+"元"
+            })
+            
+        }
+
+        {#今日收入#}
+        function today_sell() {
+            document.getElementById('today_sell').style.display="block";
+        }
+
+        {#月收入#}
+        function month_sell() {
+            document.getElementById('month_sell').style.display="block";
+        }
+
+        {#现金收入#}
+        function cash_income() {
+            document.getElementById('cash_income').style.display="block";
+        }
+
+        {#支付宝收入#}
+        function Alipay_income() {
+            document.getElementById('Alipay_income').style.display="block";
+        }
+
+        {#微信收入#}
+        function wechat_income() {
+            document.getElementById('wechat_income').style.display="block";
+        }
+
+        {#刷卡收入#}
+        function swipe_income() {
+            document.getElementById('swipe_income').style.display="block";
+        }
+        
+    </script>
+</head>
+<body>
+    <div  style="color: black;padding: 50px;padding-left: 225px">
+        <div>
+            <span  style="font-size: larger">订单号：<input  id="cust_phone" style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button onclick="select_vip()" style="width: 70px;height: 37px;font-size: x-large;">查 询</button><br><br><br>
+            <button onclick="total_sell()" class="btn btn-success">销售总额</button>
+            <button onclick="today_sell()" class="btn btn-success">今日销售额</button>
+            <button onclick="month_sell()" class="btn btn-success">当月销售额</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: black;font-size: xx-large">|</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button onclick="cash_income()" class="btn btn-success">现金总收款</button>
+            <button onclick="Alipay_income()" class="btn btn-success">支付宝总收款</button>
+            <button onclick="wechat_income()" class="btn btn-success">微信总收款</button>
+            <button onclick="swipe_income()" class="btn btn-success">刷卡总收款</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: black;font-size: xx-large">|</span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button onclick="swipe_income()" class="btn btn-success">仓库销售量</button>
+            <hr style="background-color: #aaaaaa; height: 1px; border: 0"/>
+        </div><br>
+
+        <table id="customer_info" style=";color: black" class="table table-striped">
+            <thead style="font-size: x-large;">
+                <tr>
+                    <th>订单号</th>
+                    <th>商品名称</th>
+                    <th>出售价格</th>
+                    <th>商品数量</th>
+                    <th>出库仓库</th>
+                    <th>商品条码</th>
+                    <th>商品货号</th>
+                    <th>支付方式</th>
+                    <th>用户手机号</th>
+                    <th>订单时间</th>
+                </tr>
+            </thead>
+            <tbody style="color: black">
+                {% for order_info in order_info %}
+                <tr>
+                     <td>{{ order_info.order_id }}</td>
+                     <td>{{ order_info.goods_name }}</td>
+                     <td>{{ order_info.sell_price }}</td>
+                     <td>{{ order_info.goods_shuliang }}</td>
+                     <td>{{ order_info.goods_cangku }}</td>
+                     <td>{{ order_info.goods_tiaoma }}</td>
+                     <td>{{ order_info.goods_huohao }}</td>
+                     <td>{{ order_info.pay_type }}</td>
+                     <td>{{ order_info.customer_phone }}</td>
+                     <td>{{ order_info.create_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+    </div>
+
+{#    总收入弹窗#}
+<div id="total_sell" class="sell_info">
+        <span style=";font-size: xx-large;padding-left: 25%"> 总销售额 <br><br><input class="sell_info1" type="text" id="customer_phone" disabled="disabled" style="text-align: center"></span><br><br>
+        <br>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-danger" onclick="javascript:document.getElementById('total_sell').style.display='none'">关闭</button><br><br>
+
+    </div>
+
+{#    今日收入弹窗#}
+    <div id="today_sell" class="sell_info" >
+        <span > 会员手机号： <input class="goods_input" type="text" id="customer_phone" ></span><br><br>
+        <span > 会员姓名： <input class="goods_input" type="text" id="customer_name" ></span><br><br>
+
+        <br><br><br>
+        <br><br>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-danger" onclick="javascript:document.getElementById('today_sell').style.display='none'">关闭</button><br><br>
+    </div>
+
+{#    月收入弹窗#}
+    <div id="month_sell" class="sell_info">
+        <span > 会员手机号： <input class="goods_input" type="text" id="customer_phone" ></span><br><br>
+        <span > 会员姓名： <input class="goods_input" type="text" id="customer_name" ></span><br><br>
+
+        <br><br><br>
+        <br><br>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-danger" onclick="javascript:document.getElementById('month_sell').style.display='none'">关闭</button><br><br>
+    </div>
+
+
+{#    现金收入弹窗#}
+    <div id="cash_income" class="sell_info">
+        <span > 会员手机号： <input class="goods_input" type="text" id="customer_phone" ></span><br><br>
+        <span > 会员姓名： <input class="goods_input" type="text" id="customer_name" ></span><br><br>
+        <br><br><br>
+        <br><br>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-danger" onclick="javascript:document.getElementById('cash_income').style.display='none'">关闭</button><br><br>
+    </div>
+
+{#    支付宝收入弹窗#}
+    <div id="Alipay_income" class="sell_info">
+        <span > 会员手机号： <input class="goods_input" type="text" id="customer_phone" ></span><br><br>
+        <span > 会员姓名： <input class="goods_input" type="text" id="customer_name" ></span><br><br>
+
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-danger" onclick="javascript:document.getElementById('Alipay_income').style.display='none'">关闭</button><br><br>
+    </div>
+
+
+{#    微信收入弹窗#}
+    <div id="wechat_income" class="sell_info">
+        <span > 会员手机号： <input class="goods_input" type="text" id="customer_phone" ></span><br><br>
+        <span > 会员姓名： <input class="goods_input" type="text" id="customer_name" ></span><br><br>
+
+
+        <br><br><br>
+        <br><br>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-danger" onclick="javascript:document.getElementById('wechat_income').style.display='none'">关闭</button><br><br>
+    </div>
+
+
+{#    刷卡收入弹窗#}
+    <div id="swipe_income" class="sell_info">
+        <span > 会员手机号： <input class="goods_input" type="text" id="customer_phone" ></span><br><br>
+        <span > 会员姓名： <input class="goods_input" type="text" id="customer_name" ></span><br><br>
+
+
+        <br><br><br>
+        <br><br>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-danger" onclick="javascript:document.getElementById('swipe_income').style.display='none'">关闭</button><br><br>
+    </div>
+
+
+</body>
+</html>
