@@ -9,8 +9,8 @@ from django.contrib.auth.models import User
 import random
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.db.models import Count,Avg,Max,Min,Sum
-from django.db import models
-from django.db.models import Q
+from django.core import serializers
+from django.http.response import JsonResponse
 
 
 def welcome(request):   #公共页面
@@ -323,4 +323,60 @@ def select_vip(request):
 def total_sell(request):
     total_sell=order.objects.all().aggregate(Sum("sell_price"))
     return HttpResponse(json.dumps(total_sell),content_type="application/json")
+
+
+
+#现金总收入
+def crash_income(request):
+    crash_sell=order.objects.values('pay_type').annotate(sell_price=Sum("sell_price"))
+
+    #将数据序列化为json数据
+    order_info=serializers.serialize("json",order.objects.filter(pay_type="现金"))
+    data={
+        "crash_sell":crash_sell[3]["sell_price"],
+        'order_info': order_info,
+    }
+    return JsonResponse(data=data,safe=False)
+
+#支付宝总收入
+def Alipay_income(request):
+    Alipay_income=order.objects.values('pay_type').annotate(sell_price=Sum("sell_price"))
+    order_info = serializers.serialize("json", order.objects.filter(pay_type="支付宝"))
+    data = {
+        "crash_sell": Alipay_income[2]["sell_price"],
+        'order_info': order_info,
+    }
+    return JsonResponse(data=data, safe=False)
+
+
+#微信总收入
+def wechat_income(request):
+    wechat_income=order.objects.values('pay_type').annotate(sell_price=Sum("sell_price"))
+    order_info = serializers.serialize("json", order.objects.filter(pay_type="微信"))
+    data = {
+        "crash_sell": wechat_income[1]["sell_price"],
+        'order_info': order_info,
+    }
+    return JsonResponse(data=data, safe=False)
+
+
+#刷卡总收入
+def swipe_income(request):
+    swipe_income=order.objects.values('pay_type').annotate(sell_price=Sum("sell_price"))
+    order_info = serializers.serialize("json", order.objects.filter(pay_type="刷卡"))
+    data = {
+        "crash_sell": swipe_income[0]["sell_price"],
+        'order_info': order_info,
+    }
+    return JsonResponse(data=data, safe=False)
+
+
+
+def cangku_sell(request):
+    return HttpResponse('')
+
+
+
+
+
 

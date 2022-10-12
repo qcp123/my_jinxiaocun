@@ -43,4 +43,9 @@ urlpatterns = [
     re_path(r"^del_customer/$",del_customer),      #删除会员
     re_path(r"^select_vip/$",select_vip),      #查询会员信息
     re_path(r"^total_sell/$",total_sell),      #查询总收入
+    re_path(r"^crash_income/$",crash_income),      #现金总收入
+    re_path(r"^Alipay_income/$",Alipay_income),      #支付宝总收入
+    re_path(r"^wechat_income/$",wechat_income),      #微信总收入
+    re_path(r"^swipe_income/$",swipe_income),      #刷卡总收入
+    re_path(r"^cangku_sell/$",cangku_sell),      #仓库销量
 ]
