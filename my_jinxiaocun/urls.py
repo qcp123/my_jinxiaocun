@@ -27,8 +27,8 @@ urlpatterns = [
     re_path('select_goods/', select_goods),  # 库存查询
     re_path('order_manage/', order_manage),  # 批次管理
     re_path('goods_sell/', goods_sell),  # 商品销售
-    re_path('sell_report/', sell_report),  # 销售报表
     re_path('vip_manage/', vip_manage),  # 会员管理
+    re_path('data_report/', data_report),  # 数据报表
     re_path(r'login_action/', login_action),   #登录操作
     re_path(r'register_action/', register_action),   #注册
     re_path(r"save_goods/",save_goods),    #商品入库操作
@@ -47,5 +47,5 @@ urlpatterns = [
     re_path(r"^Alipay_income/$",Alipay_income),      #支付宝总收入
     re_path(r"^wechat_income/$",wechat_income),      #微信总收入
     re_path(r"^swipe_income/$",swipe_income),      #刷卡总收入
-    re_path(r"^cangku_sell/$",cangku_sell),      #仓库销量
+    re_path(r"^sell_report/$",sell_report),      #仓库销量
 ]

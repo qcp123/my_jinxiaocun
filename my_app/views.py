@@ -64,13 +64,11 @@ def order_manage(request):   #订单管理
 def goods_sell(request):   #商品销售
     return render(request,'welcome.html',{"whichHTML":"goods_sell.html","oid":""})
 
-
-def sell_report(request):   #销售报表
-    return render(request,'welcome.html',{"whichHTML":"sell_report.html","oid":""})
-
-
 def vip_manage(request):   #会员管理
     return render(request,'welcome.html',{"whichHTML":"vip_manage.html","oid":""})
+
+def data_report(request):   #数据报表
+    return render(request,'data_report.html')
 
 
 
@@ -372,8 +370,9 @@ def swipe_income(request):
 
 
 
-def cangku_sell(request):
-    return HttpResponse('')
+def sell_report(request):
+    print(1111111111111111111111)
+    return HttpResponse('222222222222')
 
 
 

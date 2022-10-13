@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>订单管理</title>
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <link rel="import" href="data_report.html">
 
     <style>
         div[class="sell_info"]{
@@ -142,12 +144,11 @@
 
         }
 
-        //仓库销量
-        function cangku_sell() {
-            document.getElementById('cangku_sell').style.display="block";
-             $.get("/cangku_sell/",function (ret){
-            })
+        function data_report() {
+            window.open("http://127.0.0.1:8000/data_report/");
         }
+
+
         
     </script>
 </head>
@@ -166,7 +167,8 @@
             <button onclick="cash_income('{{ "微信" }}')" class="btn btn-success">微信总收款</button>
             <button onclick="cash_income('{{ "刷卡" }}')" class="btn btn-success">刷卡总收款</button>
             &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: black;font-size: xx-large">|</span>&nbsp;&nbsp;&nbsp;&nbsp;
-            <button onclick="cangku_sell()" class="btn btn-success">仓库销售量</button>
+{#            <a href="/data_report/" target="_blank"><button onclick="data_report()" class="btn btn-success">数据报表</button></a>#}
+            <button onclick="data_report()" class="btn btn-success">数据报表</button>
             <hr style="background-color: #aaaaaa; height: 1px; border: 0"/>
         </div><br>
 
@@ -203,7 +205,7 @@
             </tbody>
         </table>
 </div>
-    </div>
+
 
 {#    总收入弹窗#}
 <div id="total_sell" class="sell_info">
@@ -258,10 +260,7 @@
         <button style="position: absolute;bottom: 2%;right: 10%" class="btn btn-danger" onclick="javascript:document.getElementById('cash_income').style.display='none'">关闭</button><br><br>
     </div>
 
-{#    仓库销量弹窗#}
-    <div id="cangku_sell" class="sell_info">
-        <span > 仓库： <input class="goods_input" type="text" id="swipe_sell" disabled="disabled"></span><br><br>
-        <button style="position: absolute;bottom: 2%;right: 10%" class="btn btn-danger" onclick="javascript:document.getElementById('cangku_sell').style.display='none'">关闭</button><br><br>
-    </div>
+
+
 </body>
 </html>
