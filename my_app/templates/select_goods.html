@@ -85,10 +85,9 @@
                 "goods_huohao":goods_huohao,
                 "goods_tiaoma":goods_tiaoma,
                 "goods_type":goods_type,
-                "cagnku":cagnku,
+                "cangku":cagnku,
             },function (ret){
-
-
+                alert(ret)
             })
 
         }
@@ -107,7 +106,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <span id="goods_type" style="font-size: larger">商品类型：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span id="cagnku" style="font-size: larger">仓库：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            <span id="cagnku" style="font-size: larger">所属仓库：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button onclick="goods_select()" style="width: 100px;height: 40px;font-size: x-large;">查 询</button>
         </div><br>
@@ -167,6 +166,8 @@
         <button onclick="change_goods_info()" class="btn btn-success">确定</button>
         <button class="btn btn-danger" onclick="javascript:document.getElementById('change_goods').style.display='none'">取消</button><br><br>
     </div>
+
+
 
 </body>
 </html>

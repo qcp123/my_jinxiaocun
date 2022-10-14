@@ -262,9 +262,9 @@ def goods_select(request):
     goods_huohao=request.GET['goods_huohao']
     goods_tiaoma=request.GET['goods_tiaoma']
     goods_type=request.GET['goods_type']
-    cagnku=request.GET['cagnku']
+    goods_cangku=request.GET['cangku']
 
-    if goods_name and goods_huohao and goods_tiaoma and goods_type and cagnku =='':
+    if goods_name and goods_huohao and goods_tiaoma and goods_type and goods_cangku =='':
         goods_info=goods.objects.all()
         return HttpResponse(json.dumps(goods_info),content_type='application/json')
     else:
@@ -273,7 +273,7 @@ def goods_select(request):
             goodsserial=goods_huohao,
             barcode=goods_tiaoma,
             goodstype=goods_type,
-            cangku=cagnku,
+            cangku=goods_cangku,
         ).values()[0]
         return HttpResponse(json.dumps(goods_info), content_type='application/json')
 
@@ -369,10 +369,26 @@ def swipe_income(request):
     return JsonResponse(data=data, safe=False)
 
 
-
+#数据报表
 def sell_report(request):
-    print(1111111111111111111111)
-    return HttpResponse('222222222222')
+    x_data=[]
+    series_data=[]
+    series_data1=[]
+    cangku_order=order.objects.values('goods_cangku').annotate(order_info=Sum('goods_shuliang'),
+                                                               sell_price_sum=Sum("sell_price"))
+
+    for data in cangku_order:
+        x_data.append(data["goods_cangku"])
+        series_data.append(data["order_info"])
+        series_data1.append(data["sell_price_sum"])
+    print(cangku_order)
+
+    report_data = {
+        "x_Axis": x_data,
+        "sell_order_sum":series_data,
+        "sell_price_sum":series_data1,
+    }
+    return JsonResponse(data=report_data,safe=False)
 
 
 
