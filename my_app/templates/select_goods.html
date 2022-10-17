@@ -14,6 +14,19 @@
             height:35px;
             width: 300px;
         }
+
+        .search_goods{
+            font-size: large;
+        }
+
+        .search_goods_input{
+            height: 30px;
+            width: 250px;
+
+        }
+
+
+
     </style>
 
     <script>
@@ -87,7 +100,29 @@
                 "goods_type":goods_type,
                 "cangku":cagnku,
             },function (ret){
-                alert(ret)
+                if (ret=="success"){
+                    document.location.href="/select_goods/"
+                }else{
+                    document.getElementById('goods_table_tr').style.display="none";
+                    tbody=document.getElementById('goods_table');     //获取现金收款方式的table显示数据表格
+                    result=eval(ret);     //将获取到的字符串转变为一个列表
+                    for (var i=0;i<result.length;i++){
+                        console.log(111111111111111)
+                        var tr=document.createElement("tr");
+                        tr.innerHTML='<td>'+result[i]["id"]+'</td>'
+                                    +'<td>'+result[i]["goodsserial"]+'</td>'
+                                    +'<td>'+result[i]["batchname"]+'</td>'
+                                    +'<td>'+result[i]["goodstype"]+'</td>'
+                                    +'<td>'+result[i]["barcode"]+'</td>'
+                                    +'<td>'+result[i]["inputsize"]+'</td>'
+                                    +'<td>'+result[i]["totalprice"]+'</td>'
+                                    +'<td>'+result[i]["quantity"]+'</td>'
+                                    +'<td>'+result[i]["cangku"]+'</td>';
+                        tbody.appendChild(tr)
+                        }
+
+                }
+
             })
 
         }
@@ -97,22 +132,22 @@
 <body >
 
     <div style="color: black;padding: 50px;padding-left: 225px">
-        <div>
-            <span id="goods_huohao" style="font-size: larger">商品货号：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+        <div class="search_goods">
+            <span >商品货号：<input id="goods_huohao" class="search_goods_input" ></span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span id="goods_name" style="font-size: larger">商品名称：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            <span >商品名称：<input id="goods_name" class="search_goods_input" ></span>
             <br><br>
-            <span id="goods_tiaoma" style="font-size: larger">商品条码：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            <span >商品条码：<input id="goods_tiaoma" class="search_goods_input" ></span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span id="goods_type" style="font-size: larger">商品类型：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            <span >商品类型：<input id="goods_type" class="search_goods_input" ></span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span id="cagnku" style="font-size: larger">所属仓库：<input style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
+            <span >所属仓库：<input id="cagnku" class="search_goods_input" ></span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button onclick="goods_select()" style="width: 100px;height: 40px;font-size: x-large;">查 询</button>
         </div><br>
         <hr style="background-color: #aaaaaa; height: 1px; border: 0"/>
         <table border="1" style=";color: black" class="table table-striped">
-            <thead style="font-size: x-large;">
+            <thead style="font-size: medium">
                 <tr>
                     <th>商品ID</th>
                     <th>商品货号</th>
@@ -126,9 +161,9 @@
                     <th>操作</th>
                 </tr>
             </thead>
-            <tbody style="color: black">
+            <tbody id="goods_table" style="color: black">
                 {% for goods_info in goods %}
-                <tr>
+                <tr id="goods_table_tr">
                      <td>{{ goods_info.id }}</td>
                      <td>{{ goods_info.goodsserial }}</td>
                      <td>{{ goods_info.goodsname }}</td>

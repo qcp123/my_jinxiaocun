@@ -26,9 +26,6 @@ def child_json(eid):
         date=goods.objects.all()
         res={'goods':date}
         return res
-    if eid=="goods_sell.html":     #商品销售页面
-        date = goods.objects.all()
-        res = {'goods': date}
     if eid=='vip_manage.html':     #会员管理页面
         data=customer.objects.all()
         res={"customer_info":data}
@@ -256,6 +253,7 @@ def add_order(request):
 
 
 
+
 #根据筛选条件查询商品信息
 def goods_select(request):
     goods_name=request.GET['goods_name']
@@ -263,19 +261,26 @@ def goods_select(request):
     goods_tiaoma=request.GET['goods_tiaoma']
     goods_type=request.GET['goods_type']
     goods_cangku=request.GET['cangku']
-
-    if goods_name and goods_huohao and goods_tiaoma and goods_type and goods_cangku =='':
-        goods_info=goods.objects.all()
-        return HttpResponse(json.dumps(goods_info),content_type='application/json')
+    if goods_name and goods_huohao and goods_tiaoma and goods_type and goods_cangku is None:
+        print(1111)
+        return HttpResponse('success')
+    elif goods_name !='':
+        goods_info=goods.objects.filter(goodsname=goods_name).values()[0]
+        return HttpResponse(json.dumps(goods_info),content_type="application/json")
+    elif goods_huohao !='':
+        goods_info=goods.objects.filter(goodsserial=goods_huohao).values()[0]
+        return HttpResponse(json.dumps(goods_info),content_type="application/json")
+    elif goods_tiaoma !='':
+        goods_info=goods.objects.filter(barcode=goods_tiaoma).values()[0]
+        return HttpResponse(json.dumps(goods_info),content_type="application/json")
+    elif goods_type !='':
+        goods_info=goods.objects.filter(goodstype=goods_type).values()[0]
+        return HttpResponse(json.dumps(goods_info),content_type="application/json")
+    elif goods_cangku !='':
+        goods_info=goods.objects.filter(cangku=goods_cangku).values()[0]
+        return HttpResponse(json.dumps(goods_info),content_type="application/json")
     else:
-        goods_info=goods.objects.filter(
-            goodsname=goods_name,
-            goodsserial=goods_huohao,
-            barcode=goods_tiaoma,
-            goodstype=goods_type,
-            cangku=goods_cangku,
-        ).values()[0]
-        return HttpResponse(json.dumps(goods_info), content_type='application/json')
+        return HttpResponse('success')
 
 #新增会员
 def add_customer(request):
