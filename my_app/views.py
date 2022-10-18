@@ -385,77 +385,77 @@ def sell_report(request):
     x_data = []
     series_data = []
     series_data1 = []
-    # try:
-    now_month = request.GET["now_month"]
-    now_year = request.GET["now_year"]
-    now_day = request.GET["now_day"]
-    income_type = request.GET["income_type"]
-    date_form = datetime.datetime(int(now_year), int(now_month), int(now_day), 0, 0)
-    if income_type=="今日":
-        today_sell=order.objects.filter(create_time__gte=date_form).aggregate(Sum("sell_price"))
-        order_info = order.objects.values("goods_type").filter(create_time__gte=date_form).annotate(order_count=Sum("goods_shuliang"),
-                                                               sell_sum=Sum("sell_price"))
-        for data in order_info:
-            x_data.append(data["goods_type"])
-            series_data.append(data["order_count"])
-            series_data1.append(data["sell_sum"])
+    try:
+        now_month = request.GET["now_month"]
+        now_year = request.GET["now_year"]
+        now_day = request.GET["now_day"]
+        income_type = request.GET["income_type"]
+        date_form = datetime.datetime(int(now_year), int(now_month), int(now_day), 0, 0)
+        if income_type=="今日":
+            today_sell=order.objects.filter(create_time__gte=date_form).aggregate(Sum("sell_price"))
+            order_info = order.objects.values("goods_type").filter(create_time__gte=date_form).annotate(order_count=Sum("goods_shuliang"),
+                                                                   sell_sum=Sum("sell_price"))
+            for data in order_info:
+                x_data.append(data["goods_type"])
+                series_data.append(data["order_count"])
+                series_data1.append(data["sell_sum"])
+            report_data = {
+                "x_Axis": x_data,
+                "sell_order_sum": series_data,
+                "sell_price_sum": series_data1,
+                "sell_sum":today_sell,
+            }
+            return JsonResponse(data=report_data, safe=False)
+
+        elif income_type=='本月':
+            month_sell = order.objects.filter(create_time__month=date_form.month).aggregate(Sum("sell_price"))
+            order_info = order.objects.values("goods_type").filter(create_time__month=date_form.month).annotate(
+                order_count=Sum("goods_shuliang"),
+                sell_sum=Sum("sell_price"))
+            for data in order_info:
+                x_data.append(data["goods_type"])
+                series_data.append(data["order_count"])
+                series_data1.append(data["sell_sum"])
+            report_data = {
+                "x_Axis": x_data,
+                "sell_order_sum": series_data,
+                "sell_price_sum": series_data1,
+                "sell_sum": month_sell,
+            }
+            print(report_data)
+            return JsonResponse(data=report_data, safe=False)
+
+
+        elif income_type=="总销售":
+            #查询总的销售额
+            total_sell = order.objects.all().aggregate(Sum("sell_price"))
+            #订单汇总
+            order_info=order.objects.values("goods_type").annotate(order_count=Sum("goods_shuliang"),
+                                                                   sell_sum=Sum("sell_price"))
+            for data in order_info:
+                x_data.append(data["goods_type"])
+                series_data.append(data["order_count"])
+                series_data1.append(data["sell_sum"])
+            report_data = {
+                "x_Axis": x_data,
+                "sell_order_sum": series_data,
+                "sell_price_sum": series_data1,
+                "sell_sum":total_sell,
+            }
+            return JsonResponse(data=report_data, safe=False)
+    except:
+        cangku_order=order.objects.values('goods_cangku').annotate(order_info=Sum('goods_shuliang'),
+                                                               sell_price_sum=Sum("sell_price"))
+        for data in cangku_order:
+            x_data.append(data["goods_cangku"])
+            series_data.append(data["order_info"])
+            series_data1.append(data["sell_price_sum"])
         report_data = {
             "x_Axis": x_data,
-            "sell_order_sum": series_data,
-            "sell_price_sum": series_data1,
-            "sell_sum":today_sell,
+            "sell_order_sum":series_data,
+            "sell_price_sum":series_data1,
         }
-        return JsonResponse(data=report_data, safe=False)
-
-    elif income_type=='本月':
-        month_sell = order.objects.filter(create_time__month=date_form.month).aggregate(Sum("sell_price"))
-        order_info = order.objects.values("goods_type").filter(create_time__month=date_form.month).annotate(
-            order_count=Sum("goods_shuliang"),
-            sell_sum=Sum("sell_price"))
-        for data in order_info:
-            x_data.append(data["goods_type"])
-            series_data.append(data["order_count"])
-            series_data1.append(data["sell_sum"])
-        report_data = {
-            "x_Axis": x_data,
-            "sell_order_sum": series_data,
-            "sell_price_sum": series_data1,
-            "sell_sum": month_sell,
-        }
-        print(report_data)
-        return JsonResponse(data=report_data, safe=False)
-
-
-    elif income_type=="总销售":
-        #查询总的销售额
-        total_sell = order.objects.all().aggregate(Sum("sell_price"))
-        #订单汇总
-        order_info=order.objects.values("goods_type").annotate(order_count=Sum("goods_shuliang"),
-                                                               sell_sum=Sum("sell_price"))
-        for data in order_info:
-            x_data.append(data["goods_type"])
-            series_data.append(data["order_count"])
-            series_data1.append(data["sell_sum"])
-        report_data = {
-            "x_Axis": x_data,
-            "sell_order_sum": series_data,
-            "sell_price_sum": series_data1,
-            "sell_sum":total_sell,
-        }
-        return JsonResponse(data=report_data, safe=False)
-    # except:
-    #     cangku_order=order.objects.values('goods_cangku').annotate(order_info=Sum('goods_shuliang'),
-    #                                                            sell_price_sum=Sum("sell_price"))
-    #     for data in cangku_order:
-    #         x_data.append(data["goods_cangku"])
-    #         series_data.append(data["order_info"])
-    #         series_data1.append(data["sell_price_sum"])
-    #     report_data = {
-    #         "x_Axis": x_data,
-    #         "sell_order_sum":series_data,
-    #         "sell_price_sum":series_data1,
-    #     }
-    #     return JsonResponse(data=report_data,safe=False)
+        return JsonResponse(data=report_data,safe=False)
 
 
 
