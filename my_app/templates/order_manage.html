@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>订单管理</title>
     <link rel="import" href="data_report.html">
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <script src="/static/js/echarts.min.js" type="text/javascript"></script>
 
     <style>
         div[class="sell_info"]{
@@ -17,12 +19,34 @@
             display: none;
             border-radius: 5px;
             position:fixed;
-            top: 10%;
+            top: 5%;
             left: 15%;
             background: antiquewhite;
             width: 80%;
-            height: 80%;
+            height: 85%;
         }
+
+
+        div[class="sell_total_info"]{
+            color: black;
+            box-shadow: 4px 4px 8px grey;
+            padding-left: 5%;
+            padding-top: 2%;
+            border: 1px solid black;
+            z-index: 9999;
+            overflow: auto;
+            display: none;
+            border-radius: 5px;
+            position:fixed;
+            top: 10%;
+            left: 35%;
+            background: antiquewhite;
+            width: 30%;
+            height: 35%;
+        }
+
+
+
 
         div[class="sell_info1"]{
             text-align: center;
@@ -43,14 +67,61 @@
         }
 
         {#今日收入#}
-        function today_sell() {
+        function today_sell(income_type) {
             document.getElementById('today_sell').style.display="block";
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('report_'));
+
+            // 指定图表的配置项和数据
+            var option = {
+            title: {
+              text: income_type+'收入明细',
+              left: "center",
+              textAlign: "auto",
+            },
+            tooltip: {},
+            legend: {
+              data: ['销量','销售总额'],
+              bottom: 0,
+            },
+            xAxis: {
+              data: []
+            },
+            yAxis: {},
+            series: [
+              {
+                name: '销量',
+                type: 'bar',
+                data: []
+              },
+                {
+                name: '销售总额',
+                type: 'bar',
+                data: []
+              },
+            ]
+            };
+             var now_time=new Date()
+             $.get("/sell_report/",{
+
+                "income_type":income_type,
+                 "now_month":now_time.getMonth()+1,
+                 "now_year":now_time.getFullYear(),
+                 "now_day":now_time.getDate(),
+                 "aa":now_time.toLocaleDateString(),
+
+            },function (ret){
+                 console.log(ret)
+                option.xAxis.data=ret.x_Axis
+                option.series[0].data=ret.sell_order_sum
+                option.series[1].data=ret.sell_price_sum
+                document.getElementById('customer_phone').value=ret.sell_sum.sell_price__sum+"元";
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            })
         }
 
-        {#月收入#}
-        function month_sell() {
-            document.getElementById('month_sell').style.display="block";
-        }
 
         {#现金收入#}
         function cash_income(type) {
@@ -157,9 +228,9 @@
             <span  style="font-size: larger">订单号：<input  id="cust_phone" style="height: 35px;width: 250px;box-shadow: 2px 1px 1px 1px grey"></span>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button onclick="select_vip()" style="width: 80px;height: 37px;font-size: x-large;">查 询</button><br><br><br>
-            <button onclick="total_sell()" class="btn btn-success">销售总额</button>
-            <button onclick="today_sell()" class="btn btn-success">今日销售额</button>
-            <button onclick="month_sell()" class="btn btn-success">当月销售额</button>
+            <button onclick="today_sell('{{ "总销售" }}')" class="btn btn-success">销售总额</button>
+            <button onclick="today_sell('{{ "今日" }}')" class="btn btn-success">今日销售额</button>
+            <button onclick="today_sell('{{ "本月" }}')" class="btn btn-success">当月销售额</button>
             &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: black;font-size: xx-large">|</span>&nbsp;&nbsp;&nbsp;&nbsp;
             <button onclick="cash_income('{{ "现金" }}')" class="btn btn-success">现金总收款</button>
             <button onclick="cash_income('{{ "支付宝" }}')" class="btn btn-success">支付宝总收款</button>
@@ -167,7 +238,7 @@
             <button onclick="cash_income('{{ "刷卡" }}')" class="btn btn-success">刷卡总收款</button>
             &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: black;font-size: xx-large">|</span>&nbsp;&nbsp;&nbsp;&nbsp;
 {#            <a href="/data_report/" target="_blank"><button onclick="data_report()" class="btn btn-success">数据报表</button></a>#}
-            <button onclick="data_report()" class="btn btn-success">数据报表</button>
+            <button onclick="data_report()" class="btn btn-success">仓库销量</button>
             <hr style="background-color: #aaaaaa; height: 1px; border: 0"/>
         </div><br>
 
@@ -206,34 +277,17 @@
 </div>
 
 
-{#    总收入弹窗#}
-<div id="total_sell" class="sell_info">
-        <span style=";font-size: xx-large;padding-left: 25%"> 总销售额 <br><br><input class="sell_info1" type="text" id="customer_phone" disabled="disabled" style="text-align: center"></span><br><br>
-        <br>
-        <button class="btn btn-danger" onclick="javascript:document.getElementById('total_sell').style.display='none'">关闭</button><br><br>
 
-    </div>
 
 {#    今日收入弹窗#}
     <div id="today_sell" class="sell_info" >
-        <span > 会员手机号： <input class="goods_input" type="text" id="customer_phone" disabled="disabled"></span><br><br>
-
-        <br><br><br>
-        <br><br>
+        <span style=";font-size: large;position: absolute;top: 2%">
+            销售额:<input class="sell_info1" type="text" id="customer_phone" disabled="disabled" style="text-align: center"></span><br><br>
+         <div id="report_" style="width: 1300px;height:650px;border: 1px solid #000"></div>
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        <button class="btn btn-danger" onclick="javascript:document.getElementById('today_sell').style.display='none'">关闭</button><br><br>
+        <button style="position: absolute;bottom: 1%;right: 10%" class="btn btn-danger" onclick="javascript:document.getElementById('today_sell').style.display='none'">关闭</button><br><br>
     </div>
 
-{#    月收入弹窗#}
-    <div id="month_sell" class="sell_info">
-        <span > 会员手机号： <input class="goods_input" type="text" id="customer_phone" disabled="disabled"></span><br><br>
-        <span > 会员姓名： <input class="goods_input" type="text" id="customer_name" ></span><br><br>
-
-        <br><br><br>
-        <br><br>
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        <button class="btn btn-danger" onclick="javascript:document.getElementById('month_sell').style.display='none'">关闭</button><br><br>
-    </div>
 
 
 {#    现金收入弹窗#}

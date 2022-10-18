@@ -10,7 +10,7 @@
     <style>
         input[class="goods_"]{
             height: 50px;
-            width: 200px;
+            width: 150px;
         }
     </style>
 
@@ -33,6 +33,7 @@
                     document.getElementById('huohao').value=ret.goodsserial;
                     document.getElementById('chima').value=ret.inputsize;
                     document.getElementById('price').value=ret.totalprice;
+                    document.getElementById('goods_type').value=ret.goodstype;
                     document.getElementById('cangku').value=ret.cangku;
                     document.getElementById('sell_price').value=ret.totalprice * 0;
                 }
@@ -69,6 +70,7 @@
             tiaoma=document.getElementById("tiaoma").value;
             huohao=document.getElementById("huohao").value;
             chima=document.getElementById("chima").value;
+            goods_type=document.getElementById("goods_type").value;
             price=document.getElementById("price").value;
             shuliang=document.getElementById("shuliang").value;
             cangku=document.getElementById("cangku").value;
@@ -85,6 +87,7 @@
                 "price":price,
                 "shuliang":shuliang,
                 "cangku":cangku,
+                "goods_type":goods_type,
                 "sell_price":sell_price,
                 "pay_type":pay_type,
                 "phone_number":phone_number,
@@ -128,12 +131,13 @@
     <hr style="background-color: #aaaaaa; height: 1px; border: 0px"/>
     <div style="padding-left: 225px;color: black;padding-top: 20px" >
         <table id="goods_list" style="display: none;left:500px;color: black;width: 1600px" class="table table-striped" >
-            <thead style="font-size: x-large;">
+            <thead style="font-size: large;">
                 <tr>
                     <th>商品名称</th>
                     <th>商品条码</th>
                     <th>商品货号</th>
                     <th>商品尺码</th>
+                    <th>商品类型</th>
                     <th>商品单价</th>
                     <th>数量</th>
                     <th>仓库</th>
@@ -146,6 +150,7 @@
                      <td ><input id="tiaoma" class="goods_" type="text" disabled="disabled"></td>
                      <td ><input id="huohao" class="goods_" type="text" disabled="disabled"></td>
                      <td ><input id="chima" class="goods_" type="text" disabled="disabled"></td>
+                     <td ><input id="goods_type" class="goods_" type="text" disabled="disabled"></td>
                      <td ><input id="price" class="goods_" type="text" disabled="disabled"></td>
                      <td ><input id="shuliang" class="goods_" type="text" placeholder="输入出售数量"></td>
                      <td ><input id="cangku" class="goods_" type="text" disabled="disabled"></td>

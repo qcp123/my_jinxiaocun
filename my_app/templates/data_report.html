@@ -16,7 +16,6 @@
     <div id="report_" style="width: 1650px;height:800px;border: 1px solid #000"></div>
     <script type="text/javascript">
 
-
         function report_info(){
             var myChart = echarts.init(document.getElementById('report_'));
             // 指定图表的配置项和数据
@@ -52,8 +51,7 @@
 
             $.get("/sell_report/",function (ret) {
                  // 使用刚指定的配置项和数据显示图表。
-                console.log(ret);
-                option.xAxis.data=ret.x_Axis
+
                 option.xAxis.data=ret.x_Axis
                 option.series[0].data=ret.sell_order_sum
                 option.series[1].data=ret.sell_price_sum

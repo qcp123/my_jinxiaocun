@@ -49,7 +49,7 @@ class order(models.Model):
     goods_cangku=models.CharField(max_length=20,null=True)      #所属仓库
     goods_shuliang=models.CharField(max_length=20,null=True)    #出售数量
     pay_type=models.CharField(max_length=20,null=True)          #支付方式
-    create_time=models.DateTimeField(auto_now=True)
+    create_time=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.goods_name+'       '+self.order_id
