@@ -61,7 +61,12 @@
         function total_sell() {
             document.getElementById('total_sell').style.display="block";
             $.get("/total_sell/",function (ret){
-                document.getElementById('customer_phone').value=ret.sell_price__sum+"元"
+                if(ret.sell_price__sum =='None'){
+                    document.getElementById('customer_phone').value=0+"元"
+                }else{
+                    document.getElementById('customer_phone').value=ret.sell_price__sum+"元"
+                }
+
             })
             
         }

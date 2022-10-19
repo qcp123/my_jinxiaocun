@@ -25,11 +25,18 @@
 
         }
 
-
-
     </style>
 
     <script>
+
+        //初始页面数据
+        function set_select() {
+            $.get("/set_select/",function (ret) {
+                alert(ret)
+            })
+
+        }
+
 {#<!--    修改商品信息-->#}
         function change_goods_info() {
             id=document.getElementById('which_goods').value;
@@ -43,7 +50,7 @@
             pinlei = document.getElementById("pinlei_change").value;
             cangku = document.getElementById("cangku_change").value;
             beizhu = document.getElementById("beizhu_change").value;
-            console.log(pici)
+
             $.get("/change_goods_info/", {
                 "id":id,
                 "pici": pici,
@@ -129,7 +136,7 @@
     </script>
 
 </head>
-<body >
+<body onload="set_select()">
 
     <div style="color: black;padding: 50px;padding-left: 225px">
         <div class="search_goods">
@@ -201,6 +208,7 @@
         <button onclick="change_goods_info()" class="btn btn-success">确定</button>
         <button class="btn btn-danger" onclick="javascript:document.getElementById('change_goods').style.display='none'">取消</button><br><br>
     </div>
+
 
 
 

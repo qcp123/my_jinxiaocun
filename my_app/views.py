@@ -144,6 +144,12 @@ def tiaoma_select(request):
         return HttpResponseRedirect('请输入条码！')
 
 
+def set_select(request):
+    goods_info=goods.objects.values()
+    print(111111)
+
+    return JsonResponse(data=goods_info,safe=False)
+
 #删除商品
 def del_goods(request,id):
     goods_id=goods.objects.filter(id=id)[0].id
@@ -253,6 +259,7 @@ def add_order(request):
         return HttpResponse('订单生成失败，请确认用户信息')
     elif tiaoma=='' or goods_name=='' or huohao=='' or chima=='' or price=='' or cangku=='' or sell_price=='':
         return HttpResponse('订单生成失败，请确认商品信息')
+
 
 
 
@@ -392,19 +399,24 @@ def sell_report(request):
         income_type = request.GET["income_type"]
         date_form = datetime.datetime(int(now_year), int(now_month), int(now_day), 0, 0)
         if income_type=="今日":
-            today_sell=order.objects.filter(create_time__gte=date_form).aggregate(Sum("sell_price"))
+            try:
+                today_sell = order.objects.filter(create_time__gte=date_form).aggregate(Sum("sell_price"))
+            except:
+                today_sell=0
             order_info = order.objects.values("goods_type").filter(create_time__gte=date_form).annotate(order_count=Sum("goods_shuliang"),
                                                                    sell_sum=Sum("sell_price"))
             for data in order_info:
                 x_data.append(data["goods_type"])
                 series_data.append(data["order_count"])
                 series_data1.append(data["sell_sum"])
+
             report_data = {
                 "x_Axis": x_data,
                 "sell_order_sum": series_data,
                 "sell_price_sum": series_data1,
                 "sell_sum":today_sell,
             }
+            print(report_data)
             return JsonResponse(data=report_data, safe=False)
 
         elif income_type=='本月':
@@ -422,7 +434,7 @@ def sell_report(request):
                 "sell_price_sum": series_data1,
                 "sell_sum": month_sell,
             }
-            print(report_data)
+
             return JsonResponse(data=report_data, safe=False)
 
 

@@ -48,4 +48,5 @@ urlpatterns = [
     re_path(r"^wechat_income/$",wechat_income),      #微信总收入
     re_path(r"^swipe_income/$",swipe_income),      #刷卡总收入
     re_path(r"^sell_report/$",sell_report),      #仓库销量
+    re_path(r"^set_select/$",set_select),      #仓库销量
 ]
