@@ -54,4 +54,11 @@ class order(models.Model):
     def __str__(self):
         return self.goods_name+'       '+self.order_id
 
+#仓库表
+class cangku(models.Model):
+    cangku_name=models.CharField(max_length=20,null=True)
+    cangku_leader=models.CharField(max_length=20,null=True)
+    cangku_address=models.CharField(max_length=20,null=True)
+    create_time=models.DateTimeField(auto_now_add=True)
+
 

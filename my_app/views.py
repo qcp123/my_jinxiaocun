@@ -18,15 +18,26 @@ from django.utils import timezone as datetime
 def welcome(request):   #公共页面
     return render(request,'welcome.html')
 
-def child(request,eid,oid):   #页面分发器
+def child(request,eid,oid,ooid):   #页面分发器
     res=child_json(eid)
     return render(request,eid,res)
 
-def child_json(eid):
+def child_json(eid,ooid=''):
     res={}
     if eid=='select_goods.html':    #商品查询页面
-        date=goods.objects.all()
-        res={'goods':date}
+        date=goods.objects.all().order_by("id")
+        paginator=Paginator(date,10,1)
+        page=ooid
+        print(1111111111111111111)
+        print(page)
+        try:
+            data=paginator.page(page)
+        except PageNotAnInteger:
+            data=paginator.page(1)
+        except EmptyPage:
+            data=paginator.page(paginator.num_pages)
+
+        res={'goods':data}
         return res
     if eid=='vip_manage.html':     #会员管理页面
         data=customer.objects.all()
@@ -52,7 +63,8 @@ def goods_save(request):   #商品入库
     return render(request,'welcome.html',{"whichHTML":"goods_save.html","oid":""})
 
 def select_goods(request):   #库存查询
-    return render(request,'welcome.html',{"whichHTML":"select_goods.html","oid":""})
+    page=request.GET["page"]
+    return render(request,'welcome.html',{"whichHTML":"select_goods.html","oid":"",'ooid':page },)
 
 
 def order_manage(request):   #订单管理
@@ -65,6 +77,9 @@ def goods_sell(request):   #商品销售
 
 def vip_manage(request):   #会员管理
     return render(request,'welcome.html',{"whichHTML":"vip_manage.html","oid":""})
+
+def cangku_manage(request):   #会员管理
+    return render(request,'welcome.html',{"whichHTML":"cangku_manage.html","oid":""})
 
 def data_report(request):   #数据报表
     return render(request,'data_report.html')
@@ -399,9 +414,9 @@ def sell_report(request):
         income_type = request.GET["income_type"]
         date_form = datetime.datetime(int(now_year), int(now_month), int(now_day), 0, 0)
         if income_type=="今日":
-            try:
-                today_sell = order.objects.filter(create_time__gte=date_form).aggregate(Sum("sell_price"))
-            except:
+
+            today_sell = order.objects.filter(create_time__gte=date_form).aggregate(Sum("sell_price"))
+            if today_sell is None:
                 today_sell=0
             order_info = order.objects.values("goods_type").filter(create_time__gte=date_form).annotate(order_count=Sum("goods_shuliang"),
                                                                    sell_sum=Sum("sell_price"))
@@ -469,6 +484,22 @@ def sell_report(request):
         }
         return JsonResponse(data=report_data,safe=False)
 
+
+def add_cangku(request):
+    cangku_name=request.GET["cangku_name"]
+    cangku_leader=request.GET["cangku_leader"]
+    cangku_address=request.GET["cangku_address"]
+
+    if cangku_name and cangku_leader and cangku_address !='':
+        cangku.objects.create(cangku_name=cangku_name,cangku_leader=cangku_leader,cangku_address=cangku_address)
+        print(11111)
+        HttpResponse('success')
+    elif cangku_name=='':
+        HttpResponse('仓库名称不能为空')
+    elif cangku_leader =='':
+        HttpResponse('仓库负责人不能为空')
+    elif cangku_leader =='':
+        HttpResponse('请选择仓库地址')
 
 
 

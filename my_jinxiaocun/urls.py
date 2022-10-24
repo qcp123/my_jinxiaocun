@@ -20,7 +20,7 @@ from my_app.views import *
 urlpatterns = [
     re_path('^admin/', admin.site.urls),
     re_path('welcome/', welcome),  # 首页也
-    re_path(r"^child/(?P<eid>.+)/(?P<oid>.*)/$", child),  # 分发器
+    re_path(r"^child/(?P<eid>.+)/(?P<oid>.*)/(?P<ooid>.*)/$", child),  # 分发器
     re_path('home/', home),
     re_path('login/', login),  # 登录
     re_path('goods_save/', goods_save),  # 商品入库
@@ -28,6 +28,7 @@ urlpatterns = [
     re_path('order_manage/', order_manage),  # 批次管理
     re_path('goods_sell/', goods_sell),  # 商品销售
     re_path('vip_manage/', vip_manage),  # 会员管理
+    re_path('cangku_manage/', cangku_manage),  # 仓库管理
     re_path('data_report/', data_report),  # 数据报表
     re_path(r'login_action/', login_action),   #登录操作
     re_path(r'register_action/', register_action),   #注册
@@ -49,4 +50,5 @@ urlpatterns = [
     re_path(r"^swipe_income/$",swipe_income),      #刷卡总收入
     re_path(r"^sell_report/$",sell_report),      #仓库销量
     re_path(r"^set_select/$",set_select),      #仓库销量
+    re_path(r"^add_cangku/$",add_cangku),      #新增仓库
 ]

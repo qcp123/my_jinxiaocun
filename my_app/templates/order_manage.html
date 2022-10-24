@@ -121,7 +121,12 @@
                 option.xAxis.data=ret.x_Axis
                 option.series[0].data=ret.sell_order_sum
                 option.series[1].data=ret.sell_price_sum
-                document.getElementById('customer_phone').value=ret.sell_sum.sell_price__sum+"元";
+                 if (ret.sell_sum.sell_price__sum ==null ){
+                     document.getElementById('customer_phone').value=0+"元";
+                 }else{
+                     document.getElementById('customer_phone').value=ret.sell_sum.sell_price__sum+"元";
+                 }
+
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
             })

@@ -7,9 +7,10 @@
 	<link rel="stylesheet" type="text/css" href="/static/202206/css/htmleaf-demo.css">
 	<link rel="stylesheet" type="text/css" href="/static/202206/css/nav.css">
     <link rel="stylesheet" type="text/css" href="/static/202206/fonts/iconfont.css">
-    <script src="/static/bootstrap-3.4.1-dist/js/bootstrap.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css"/>
     <link rel="shortcut icon" href="/static/jinxiaocun_title_picture"/>
+
+    <script src="/static/bootstrap-3.4.1-dist/js/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
 	<div class="nav">
@@ -17,9 +18,10 @@
 	            <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)"><img src="/static/202206/images/mini.png" ></div>
 	        </div>
 	                    <li class="nav-item"><a href="/goods_save/"><span>商品入库</span></a></li>
-	                    <li class="nav-item"><a href="/select_goods/"><span>库存查询</span></a></li>
+	                    <li class="nav-item"><a href="/select_goods/?page=1"><span>库存查询</span></a></li>
                         <li class="nav-item"><a href="/goods_sell/"><span>商品销售</span></a></li>
 	                    <li class="nav-item"><a href="/order_manage/"><span>订单管理</span></a></li>
+	                    <li class="nav-item"><a href="/cangku_manage/"><span>仓库管理</span></a></li>
 	                    <li class="nav-item"><a href="/vip_manage/"><span>会员管理</span></a></li>
 	                    <li class="nav-item"><a href="/admin/" target="_blank"><span>管理后台</span></a></li>
 	        </ul>
@@ -31,7 +33,7 @@
     <div id="page1">
     </div>
      <script>
-        $('#page1').load('/child/'+'{{ whichHTML }}/{{ oid }}/')
+        $('#page1').load('/child/'+'{{ whichHTML }}/{{ oid }}/{{ ooid }}/')
     </script>
 
 </body>

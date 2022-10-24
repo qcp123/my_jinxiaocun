@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>库存查询</title>
 
-    <script src="/static/bootstrap-3.4.1-dist/js/bootstrap.min.js" type="text/javascript"></script>
+
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css"/>
+     <script src="/static/bootstrap-3.4.1-dist/js/bootstrap.min.js" type="text/javascript"></script>
     <style>
         .good_info{
             font-size: 15px;
@@ -66,7 +67,7 @@
             },function (ret){
                 if(ret=="success"){
                     alert("修改成功")
-                    document.location.href="/select_goods/"
+                    document.location.href="/select_goods/?page=1"
                 }else {
                     alert(ret)
                 }
@@ -108,7 +109,7 @@
                 "cangku":cagnku,
             },function (ret){
                 if (ret=="success"){
-                    document.location.href="/select_goods/"
+                    document.location.href="/select_goods/?page=1"
                 }else{
                     document.getElementById('goods_table_tr').style.display="none";
                     tbody=document.getElementById('goods_table');     //获取现金收款方式的table显示数据表格
@@ -209,7 +210,29 @@
         <button class="btn btn-danger" onclick="javascript:document.getElementById('change_goods').style.display='none'">取消</button><br><br>
     </div>
 
-
+    <div style="text-align: center">
+        <div class="pagination">
+            <span class="step-links">
+                {% if goods.has_previous %}
+                    <button><a href="?page={{ goods.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;上一页</span>
+                    </a>&nbsp;&nbsp;</button>
+                {% endif %}
+                {% for pg in goods.paginator.page_range %}
+                    {% if goods.number == pg  %}
+                        <button><a href="?page={{ pg }}">第{{ pg }}页</a>&nbsp;&nbsp;&nbsp;</button>
+                    {% else %}
+                        <button><a href="?page={{ pg }}">{{ pg }}</a>&nbsp;&nbsp;</button>
+                    {% endif %}
+                {% endfor %}
+                {% if goods.has_next %}
+                    <button><a href="?page={{ goods.next_page_number }}" aria-label="Next">
+                        &nbsp;&nbsp;<span>下一页</span>
+                    </a></button>
+                {% endif %}
+            </span>
+        </div>
+    </div>
 
 
 </body>
