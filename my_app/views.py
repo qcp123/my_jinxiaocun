@@ -492,16 +492,19 @@ def add_cangku(request):
 
     if cangku_name and cangku_leader and cangku_address !='':
         cangku.objects.create(cangku_name=cangku_name,cangku_leader=cangku_leader,cangku_address=cangku_address)
-        print(11111)
-        HttpResponse('success')
+        return HttpResponse('success')
     elif cangku_name=='':
-        HttpResponse('仓库名称不能为空')
+        return HttpResponse('仓库名称不能为空')
     elif cangku_leader =='':
-        HttpResponse('仓库负责人不能为空')
+        return HttpResponse('仓库负责人不能为空')
     elif cangku_leader =='':
-        HttpResponse('请选择仓库地址')
+        return HttpResponse('请选择仓库地址')
 
 
-
+def set_cangku_info(request):
+    data={}
+    result=cangku.objects.values()
+    data["list"]=list(result)
+    return JsonResponse(data)
 
 

@@ -61,4 +61,7 @@ class cangku(models.Model):
     cangku_address=models.CharField(max_length=20,null=True)
     create_time=models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.cangku_name+" "*100+self.cangku_leader
+
 
